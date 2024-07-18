@@ -1,0 +1,101 @@
+{
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "beforeBuildCommand": "pnpm build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../build"
+  },
+  "package": {
+    "productName": "HandHeld Launcher",
+    "version": "0.0.1"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      }
+    },
+    "windows": [
+      {
+        "title": "HandHeld Launcher",
+        "width": 800,
+        "height": 600,
+        "fullscreen": true,
+        "resizable": true
+      }
+    ],
+    "security": {
+      "csp": null
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.inner.os",
+      "icon": [
+        "icons/Square150x150Logo.scale-100.png",
+        "icons/Square44x44Logo.targetsize-256.png",
+        "icons/Square71x71Logo.scale-150.png",
+        "icons/favicon-180x180.png",
+        "icons/favicon-96x96.png",
+        "icons/Square150x150Logo.scale-125.png",
+        "icons/Square44x44Logo.targetsize-30.png",
+        "icons/Square71x71Logo.scale-200.png",
+        "icons/favicon-192x192.png",
+        "icons/icon-128x128.png",
+        "icons/Square150x150Logo.scale-150.png",
+        "icons/Square44x44Logo.targetsize-32.png",
+        "icons/Square71x71Logo.scale-400.png",
+        "icons/favicon-196x196.png",
+        "icons/icon-16x16.png",
+        "icons/Square150x150Logo.scale-200.png",
+        "icons/Square44x44Logo.targetsize-36.png",
+        "icons/StoreLogo.scale-150.png",
+        "icons/favicon-24x24.png",
+        "icons/icon-256x256.png",
+        "icons/Square150x150Logo.scale-400.png",
+        "icons/Square44x44Logo.targetsize-40.png",
+        "icons/StoreLogo.scale-300.png",
+        "icons/favicon-310x310.png",
+        "icons/icon-32x32.png",
+        "icons/Square310x310Logo.scale-100.png",
+        "icons/Square44x44Logo.targetsize-48.png",
+        "icons/StoreLogo.scale-71.png",
+        "icons/favicon-32x32.png",
+        "icons/icon-512x512.png",
+        "icons/Square310x310Logo.scale-125.png",
+        "icons/Square44x44Logo.targetsize-60.png",
+        "icons/favicon-114x114.png",
+        "icons/favicon-48x48.png",
+        "icons/icon-64x64.png",
+        "icons/Square310x310Logo.scale-150.png",
+        "icons/Square44x44Logo.targetsize-64.png",
+        "icons/favicon-120x120.png",
+        "icons/favicon-57x57.png",
+        "icons/image-128x128.png",
+        "icons/Square310x310Logo.scale-200.png",
+        "icons/Square44x44Logo.targetsize-72.png",
+        "icons/favicon-128x128.png",
+        "icons/favicon-60x60.png",
+        "icons/image-32x32.png",
+        "icons/Square310x310Logo.scale-400.png",
+        "icons/Square44x44Logo.targetsize-80.png",
+        "icons/favicon-144x144.png",
+        "icons/favicon-64x64.png",
+        "icons/Square44x44Logo.targetsize-16.png",
+        "icons/Square44x44Logo.targetsize-96.png",
+        "icons/favicon-150x150.png",
+        "icons/favicon-70x70.png",
+        "icons/Square44x44Logo.targetsize-20.png",
+        "icons/Square71x71Logo.scale-100.png",
+        "icons/favicon-152x152.png",
+        "icons/favicon-72x72.png",
+        "icons/Square44x44Logo.targetsize-24.png",
+        "icons/Square71x71Logo.scale-125.png",
+        "icons/favicon-16x16.png",
+        "icons/favicon-76x76.png"
+      ]
+    }
+  }
+}
