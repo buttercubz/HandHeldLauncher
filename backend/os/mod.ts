@@ -31,24 +31,21 @@ export const OSKeys = {
 };
 
 export async function getAllDisks(
-  force = false,
+  force = false
 ): Promise<DiskInfo[] | DiskInfo> {
   if (force || storage.getItem(OSKeys.disk) === null) {
     const command = `
     & {
-      Get-WmiObject Win32_LogicalDisk | 
-      Select-Object DeviceID, VolumeName, 
-      @{Name="Size";Expression={[math]::Round($_.Size / 1GB, 2)}}, 
-      @{Name="FreeSpace";Expression={[math]::Round($_.FreeSpace / 1GB, 2)}} | 
+      Get-WmiObject Win32_LogicalDisk |
+      Select-Object DeviceID, VolumeName,
+      @{Name="Size";Expression={[math]::Round($_.Size / 1GB, 2)}},
+      @{Name="FreeSpace";Expression={[math]::Round($_.FreeSpace / 1GB, 2)}} |
       ConvertTo-Json
     }
   `;
 
     const cmd = new Deno.Command("powershell", {
-      args: [
-        "-Command",
-        command,
-      ],
+      args: ["-Command", command],
     });
 
     const { code, stdout, stderr } = await cmd.output();
@@ -95,10 +92,7 @@ export async function getHardWareInfo(force = false): Promise<HardwareInfo> {
   `;
 
     const cmd = new Deno.Command("powershell", {
-      args: [
-        "-Command",
-        command,
-      ],
+      args: ["-Command", command],
     });
 
     const { code, stdout, stderr } = await cmd.output();
@@ -141,10 +135,7 @@ export async function getBatteryInfo(): Promise<BatteryInfo> {
   const abort = new AbortController();
 
   const cmd = new Deno.Command("powershell", {
-    args: [
-      "-Command",
-      command,
-    ],
+    args: ["-Command", command],
     signal: abort.signal,
   });
 

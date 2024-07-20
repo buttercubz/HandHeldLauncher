@@ -6,7 +6,7 @@
   import MenuCards from "$lib/components/blocks/menu-cards.svelte";
 
   import { GamepadNavigationProvider } from "$lib/components/gamepad-navigation";
-  import { PUBLIC_BACKEND_URL } from '$env/static/public'
+  import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import { fade } from "svelte/transition";
 
   let openSide = false;
@@ -24,11 +24,12 @@
 
     const data: any[] = await response.json();
 
-    games = data.map(({ name, verticalGrids }) => ({
+    games = data.map(({ name, verticalGrids, appid }) => ({
       title: name,
       imgSrc: [...verticalGrids.data].find(({ width, height }) => {
         return width === 600 && height === 900;
       }).url,
+      id: appid,
     }));
   });
 </script>
