@@ -1,5 +1,6 @@
 import { walk } from "jsr:@std/fs@0.223/walk";
 import { storage } from "../local-storage.ts";
+import { getAllDisks } from "../os/mod.ts";
 
 const steamPath = "C:\\Program Files (x86)\\Steam\\steamapps";
 
@@ -19,29 +20,53 @@ export const SteamKeys = {
 const parse = JSON.parse;
 const strinify = JSON.stringify;
 
+
+async function findSteamPaths(): Promise<string[]> {
+  const disks = await getAllDisks();
+  const pathsToCheck = disks.flatMap((disk) => [
+    `${disk.DeviceID}\\Program Files (x86)\\Steam\\steamapps`,
+    `${disk.DeviceID}\\SteamLibrary\\steamapps`,
+    `${disk.DeviceID}\\Steam\\steamapps`,
+  ]);
+
+  const checkPathPromises = pathsToCheck.map(async (path) => {
+    const steamExists = await Deno.stat(path)
+      .then(() => true)
+      .catch(() => false);
+    return steamExists ? path : null;
+  });
+
+  const resolvedPaths = await Promise.all(checkPathPromises);
+  return resolvedPaths.filter((path) => path !== null) as string[];
+}
+
+
 export async function getGamesSteam(force = false) {
   if (force || storage.getItem(SteamKeys.games) === null) {
     const games: SteamGamesInfo[] = [];
+    const steamPaths = await findSteamPaths();
 
-    for await (const file of walk(steamPath, {
-      exts: ["acf"],
-      maxDepth: 1,
-    })) {
-      if (file.isFile) {
-        const raw = await Deno.readTextFile(file.path);
+    for (const steamPath of steamPaths) {
+      for await (const file of walk(steamPath, {
+        exts: ["acf"],
+        maxDepth: 1,
+      })) {
+        if (file.isFile) {
+          const raw = await Deno.readTextFile(file.path);
 
-        const {
-          AppState: { appid, name, SizeOnDisk, LastPlayed },
-        } = parseACF(raw) ?? {};
+          const {
+            AppState: { appid, name, SizeOnDisk, LastPlayed },
+          } = parseACF(raw) ?? {};
 
-        games.push({
-          appid,
-          name,
-          SizeOnDisk,
-          LastPlayed,
-          verticalGrids: await verticalGrids(appid),
-          gameInfo: await gameInfo(appid),
-        });
+          games.push({
+            appid,
+            name,
+            SizeOnDisk,
+            LastPlayed,
+            verticalGrids: await verticalGrids(appid),
+            gameInfo: await gameInfo(appid),
+          });
+        }
       }
     }
 
