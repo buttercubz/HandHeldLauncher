@@ -1,18 +1,24 @@
 <script lang="ts">
   import * as AlertDialog from "$lib/components/ui/alert-dialog";
+  import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import Steam from "$lib/components/icons/Steam.svelte";
   import * as Sheet from "$lib/components/ui/sheet";
-  import { cn } from "$lib/utils";
   import { createEventDispatcher } from "svelte";
+  import { cn } from "$lib/utils";
 
   export let title = "";
   export let imgSrc = "";
+  export let id = "";
 
   export let openModal = false;
 
   const dispatch = createEventDispatcher<{ modal: boolean }>();
 
   $: dispatch("modal", openModal);
+
+  async function openGameid(id: string) {
+    fetch(`${PUBLIC_BACKEND_URL}/api/steam/open-game?id=${id}`);
+  }
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -68,7 +74,7 @@
         <AlertDialog.Action
           class="modal-buttons"
           data-click
-          on:click={() => alert("open " + title)}
+          on:click={() => openGameid(id)}
         >
           Lauch Game
         </AlertDialog.Action>

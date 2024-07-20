@@ -2,6 +2,8 @@ import { walk } from "jsr:@std/fs@0.223/walk";
 import { storage } from "../local-storage.ts";
 import { getAllDisks } from "../os/mod.ts";
 
+const steamPath = "C:\\Program Files (x86)\\Steam\\steamapps";
+
 interface SteamGamesInfo {
   appid: string;
   name: string;
@@ -17,6 +19,7 @@ export const SteamKeys = {
 
 const parse = JSON.parse;
 const strinify = JSON.stringify;
+
 
 async function findSteamPaths(): Promise<string[]> {
   const disks = await getAllDisks();
@@ -36,6 +39,7 @@ async function findSteamPaths(): Promise<string[]> {
   const resolvedPaths = await Promise.all(checkPathPromises);
   return resolvedPaths.filter((path) => path !== null) as string[];
 }
+
 
 export async function getGamesSteam(force = false) {
   if (force || storage.getItem(SteamKeys.games) === null) {
@@ -110,10 +114,8 @@ function parseACF(input: string) {
 }
 
 async function verticalGrids(id: string) {
-  const response = await fetch(
-    "https://www.steamgriddb.com/api/v2/grids/steam/" +
-      id +
-      "?limit=50&dimension=['600x900']",
+  const response = fetch(
+    `https://www.steamgriddb.com/api/v2/grids/steam/${id}?limit=50&dimension=['600x900']`,
     {
       method: "GET",
       headers: {
@@ -122,14 +124,14 @@ async function verticalGrids(id: string) {
     }
   );
 
-  const data = await response.json();
+  const data = (await response).json();
 
   return data;
 }
 
 async function gameInfo(id: string) {
-  const response = await fetch(
-    "https://www.steamgriddb.com/api/v2/games/steam/" + id,
+  const response = fetch(
+    `https://www.steamgriddb.com/api/v2/games/steam/${id}`,
     {
       method: "GET",
       headers: {
@@ -138,7 +140,26 @@ async function gameInfo(id: string) {
     }
   );
 
-  const data = await response.json();
+  const data = (await response).json();
 
   return data;
+}
+
+export async function openGame(id: string) {
+  const command = `
+      & {
+        Start-Process steam://rungameid/${id}
+      }
+    `;
+
+  const cmd = new Deno.Command("powershell", {
+    args: ["-Command", command],
+  });
+
+  const { code, stderr } = await cmd.output();
+
+  if (code) {
+    const errorString = decoder.decode(stderr);
+    throw new Error(`Failed to execute PowerShell command: ${errorString}`);
+  }
 }
