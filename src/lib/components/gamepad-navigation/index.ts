@@ -301,6 +301,7 @@ export const createGamepadNavigation = (
         lastActionTime = currentTime;
       } else if (axis === 1) {
         handleNavigation(value > 0 ? "down" : "up");
+
         lastActionTime = currentTime;
       }
     }
@@ -309,8 +310,43 @@ export const createGamepadNavigation = (
   const initGamepadListener = () => {
     const listener = new GamepadListener({ analog: true });
 
+    // Estado para mantener si los botones están presionados
+    const pressedButtons: Record<string, boolean> = {
+      left: false,
+      right: false,
+    };
+
+    // Función para manejar la navegación continua
+    const handleContinuousNavigation = (direction: string) => {
+      state.update((s) => {
+        let { verticalCursor, horizontalCursor, zones } = s;
+        switch (direction) {
+          case "left":
+            if (horizontalCursor > 0) {
+              horizontalCursor--;
+            }
+            break;
+          case "right":
+            const elements = document.querySelectorAll(zones[verticalCursor]);
+            if (horizontalCursor < elements.length - 1) {
+              horizontalCursor++;
+            }
+            break;
+        }
+        return { ...s, verticalCursor, horizontalCursor };
+      });
+
+      updateFocus();
+
+      setTimeout(() => {
+        if (pressedButtons[direction]) {
+          handleContinuousNavigation(direction);
+        }
+      }, throttleTime);
+    };
+
     listener.on("gamepad:button", (e: any) => {
-      if (e.detail.value === 0) {
+      if (e.detail.value === 1) {
         buttons.set(ButtonMapIDToText[Number(e.detail.button)]);
 
         onPressButton?.(ButtonMapIDToText[Number(e.detail.button)] as AllKeys);
@@ -323,10 +359,12 @@ export const createGamepadNavigation = (
             handleNavigation("down");
             break;
           case ButtonMapIDEnum.LEFT:
-            handleNavigation("left");
+            pressedButtons.left = true;
+            handleContinuousNavigation("left");
             break;
           case ButtonMapIDEnum.RIGHT:
-            handleNavigation("right");
+            pressedButtons.right = true;
+            handleContinuousNavigation("right");
             break;
           case ButtonMapIDEnum.A:
             handleAction();
@@ -343,6 +381,17 @@ export const createGamepadNavigation = (
         }
 
         buttons.set("DEFAULT");
+      } else if (e.detail.value === 0) {
+        buttons.set("DEFAULT");
+
+        switch (e.detail.button) {
+          case ButtonMapIDEnum.LEFT:
+            pressedButtons.left = false;
+            break;
+          case ButtonMapIDEnum.RIGHT:
+            pressedButtons.right = false;
+            break;
+        }
       }
     });
     listener.on("gamepad:axis", (e: any) => {
