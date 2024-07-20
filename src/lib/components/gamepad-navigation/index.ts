@@ -111,6 +111,9 @@ export const ButtonMapTextToID: Record<string, number> = {
   LEFT: 14,
 };
 
+let lastActionTime = 0;
+const throttleTime = 200;
+
 export const createGamepadNavigation = (
   onPressButton = (button: AllKeys) => {}
 ) => {
@@ -285,6 +288,24 @@ export const createGamepadNavigation = (
     }
   };
 
+  function handleAnalogMovement(axis: number, value: number) {
+    const currentTime = Date.now();
+    const deadzone = 0.5;
+
+    if (
+      Math.abs(value) > deadzone &&
+      currentTime - lastActionTime >= throttleTime
+    ) {
+      if (axis === 0) {
+        handleNavigation(value > 0 ? "right" : "left");
+        lastActionTime = currentTime;
+      } else if (axis === 1) {
+        handleNavigation(value > 0 ? "down" : "up");
+        lastActionTime = currentTime;
+      }
+    }
+  }
+
   const initGamepadListener = () => {
     const listener = new GamepadListener({ analog: true });
 
@@ -323,6 +344,10 @@ export const createGamepadNavigation = (
 
         buttons.set("DEFAULT");
       }
+    });
+    listener.on("gamepad:axis", (e: any) => {
+      const { axis, value } = e.detail;
+      handleAnalogMovement(axis, value);
     });
 
     listener.start();
