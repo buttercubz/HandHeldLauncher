@@ -196,17 +196,33 @@ export const createGamepadNavigation = (
   const handleNavigation = (direction: "up" | "down" | "left" | "right") => {
     state.update((s) => {
       let { verticalCursor, horizontalCursor, zones } = s;
+      const currentElements = document.querySelectorAll(zones[verticalCursor]);
+
+      const adjustHorizontalCursor = (newElements: NodeListOf<Element>) => {
+        if (horizontalCursor >= newElements.length) {
+          horizontalCursor = newElements.length - 1;
+        } else if (horizontalCursor < 0) {
+          horizontalCursor = 0;
+        }
+      };
+
       switch (direction) {
         case "up":
           if (verticalCursor > 0) {
             verticalCursor--;
-            horizontalCursor = 0;
+            const newElements = document.querySelectorAll(
+              zones[verticalCursor]
+            );
+            adjustHorizontalCursor(newElements);
           }
           break;
         case "down":
           if (verticalCursor < zones.length - 1) {
             verticalCursor++;
-            horizontalCursor = 0;
+            const newElements = document.querySelectorAll(
+              zones[verticalCursor]
+            );
+            adjustHorizontalCursor(newElements);
           }
           break;
         case "left":
@@ -215,12 +231,12 @@ export const createGamepadNavigation = (
           }
           break;
         case "right":
-          const elements = document.querySelectorAll(zones[verticalCursor]);
-          if (horizontalCursor < elements.length - 1) {
+          if (horizontalCursor < currentElements.length - 1) {
             horizontalCursor++;
           }
           break;
       }
+
       return { ...s, verticalCursor, horizontalCursor };
     });
 
@@ -256,7 +272,6 @@ export const createGamepadNavigation = (
     }
 
     if (isModal) {
-      console.log(currentElement);
       document.body.focus();
       return document.body.click();
     }
@@ -270,7 +285,7 @@ export const createGamepadNavigation = (
 
       if (caps) {
         //@ts-expect-error
-        console.log(caps.click());
+        caps.click();
       }
     }
   };
