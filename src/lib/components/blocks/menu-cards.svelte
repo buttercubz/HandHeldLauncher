@@ -1,5 +1,5 @@
 <script>
-  import { Gamepad2, Edit3 } from "lucide-svelte";
+  import { Gamepad2, SettingsIcon } from "lucide-svelte";
   import { goto } from "$app/navigation";
 </script>
 
@@ -12,7 +12,7 @@
   >
     <Gamepad2 class="w-12 h-12 text-white" />
     <div class="text-white bottom-0 absolute w-full p-4 rounded-b-lg">
-      Browse all games
+      Library
     </div>
   </div>
 
@@ -22,9 +22,9 @@
     on:click={() => (window.location.pathname = "/settings")}
     class="relative outlined outline-offset-0 rounded-lg w-[300px] h-[150px] group flex flex-col items-center justify-center bg-primary/30 backdrop-blur-xl font-bold text-white navigable-items"
   >
-    <Edit3 class="w-12 h-12 text-white" />
+    <SettingsIcon class="w-12 h-12 text-white" />
     <div class="text-white bottom-0 absolute w-full p-4 rounded-b-lg">
-      Customize your Home
+      Settings
     </div>
   </div>
 

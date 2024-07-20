@@ -8,8 +8,8 @@
   xmlns="http://www.w3.org/2000/svg"
   id="svg4136"
   version="1.1"
-  width="372.36823"
-  height="372.57281"
+  width="32px"
+  height="32px"
   viewBox="0 0 372.36823 372.57281"
   class={style}
 >

@@ -34,36 +34,11 @@
       </Button>
     </li>
 
-    <li>
-      <Input class="navigable-nav" placeholder="search" type="text" />
-
-      <!-- <Button
-        variant="outline"
-        class="rounded-full bg-transparent h-10 w-10 p-0 border-foreground navigable-nav"
-        on:click={() => (openSideSettings = !openSideSettings)}
-        data-tab="2"
-        data-click
-      >
-        <SearchIcon size={24} />
-      </Button>
-
-      <Button
-        variant="outline"
-        class="rounded-full bg-transparent h-10 w-10 p-0 border-foreground navigable-nav"
-        on:click={() => goto("/lock-screen")}
-        data-tab="3"
-        data-click
-      >
-        <SettingsIcon size={24} />
-      </Button> -->
-    </li>
-
     <li class="flex flex-row items-center space-x-3">
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <Button
         variant="ghost"
         class="hover:bg-transparent navigable-nav"
-        on:click={() => (openSideSettings = !openSideSettings)}
         data-click
       >
         <Wifi />

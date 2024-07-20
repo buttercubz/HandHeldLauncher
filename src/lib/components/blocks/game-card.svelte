@@ -1,5 +1,6 @@
 <script lang="ts">
   import * as AlertDialog from "$lib/components/ui/alert-dialog";
+  import Button from "$lib/components/ui/button/button.svelte";
   import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import Steam from "$lib/components/icons/Steam.svelte";
   import * as Sheet from "$lib/components/ui/sheet";
@@ -9,6 +10,7 @@
   export let title = "";
   export let imgSrc = "";
   export let id = "";
+  export let zone = "navigable-games";
 
   export let openModal = false;
 
@@ -24,7 +26,8 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <li
   class={cn(
-    "relative outlined outline-offset-0 rounded-xl w-[220px] h-[310px] flex-shrink-0 transition-all group navigable-games"
+    "relative outlined outline-offset-0 rounded-[14px] w-[220px] h-[310px] flex-shrink-0 transition-all group",
+    zone
   )}
   on:click={() => (openModal = !openModal)}
   data-click
@@ -55,7 +58,7 @@
 
     <div class="flex flex-row items-center justify-center">
       <img
-        class="w-[200px] h-[220px] object-fill rounded-xl"
+        class="w-[165px] h-[232.5px] object-fill rounded-xl"
         src={imgSrc}
         alt={title}
       />
@@ -65,19 +68,21 @@
       class="flex flex-row justify-between w-full items-center"
     >
       <div class="mx-auto">
-        <AlertDialog.Cancel
+        <Button
+          data-click
+          variant="outline"
           class="modal-buttons"
           on:click={() => (openModal = !openModal)}
         >
           Close
-        </AlertDialog.Cancel>
-        <AlertDialog.Action
+        </Button>
+        <Button
           class="modal-buttons"
           data-click
           on:click={() => openGameid(id)}
         >
           Lauch Game
-        </AlertDialog.Action>
+        </Button>
       </div>
     </AlertDialog.Footer>
   </AlertDialog.Content>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_BACKEND_URL } from "$env/static/public";
   import { onMount } from "svelte";
   import {
     BatteryChargingIcon,
@@ -7,7 +8,6 @@
     BatteryMediumIcon,
     BatteryWarningIcon,
   } from "lucide-svelte";
-  import { PUBLIC_BACKEND_URL } from "$env/static/public";
 
   let batteryLevel = 0;
   let chargingStatus = false;
@@ -52,5 +52,10 @@
 </script>
 
 {#key chargingStatus || chargingStatus || BatteryIcon}
-  <BatteryIcon />
+  <div class="flex space-x-1 items-center justify-center">
+    <BatteryIcon class="mt-[1px]" />
+    <span>
+      {batteryLevel}%
+    </span>
+  </div>
 {/key}

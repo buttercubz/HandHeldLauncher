@@ -65,7 +65,7 @@
 
     <div class="flex flex-col w-full items-center space-y-4">
       <ul
-        class="w-[98dvw] flex flex-row space-x-5 overflow-x-auto items-end justify-start h-auto p-8 mb-5 remove-scroll"
+        class="w-[98svw] flex flex-row space-x-5 overflow-x-auto items-end justify-start h-auto p-8 mb-5 remove-scroll"
         id="games-list-home"
       >
         {#each games as game}
@@ -74,12 +74,15 @@
             on:modal={({ detail }) => {
               if (detail) {
                 zones = [".modal-buttons"];
+                zones = zones;
               } else {
                 zones = [
                   ".navigable-nav",
                   ".navigable-games",
                   ".navigable-items",
                 ];
+
+                zones = zones;
               }
             }}
           />
