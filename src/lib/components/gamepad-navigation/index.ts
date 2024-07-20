@@ -310,13 +310,11 @@ export const createGamepadNavigation = (
   const initGamepadListener = () => {
     const listener = new GamepadListener({ analog: true });
 
-    // Estado para mantener si los botones están presionados
     const pressedButtons: Record<string, boolean> = {
       left: false,
       right: false,
     };
 
-    // Función para manejar la navegación continua
     const handleContinuousNavigation = (direction: string) => {
       state.update((s) => {
         let { verticalCursor, horizontalCursor, zones } = s;
