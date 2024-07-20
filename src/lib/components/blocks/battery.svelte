@@ -7,6 +7,7 @@
     BatteryMediumIcon,
     BatteryWarningIcon,
   } from "lucide-svelte";
+  import { PUBLIC_BACKEND_URL } from "$env/static/public";
 
   let batteryLevel = 0;
   let chargingStatus = false;
@@ -27,30 +28,25 @@
     }
   }
 
+  async function updateBatteryInfo() {
+    const evtSource = new EventSource(
+      `${PUBLIC_BACKEND_URL}/api/os/battery-info`
+    );
+
+    evtSource.addEventListener("message", ({ data }) => {
+      const { chargeLevel, isCharging } = JSON.parse(data);
+
+      batteryLevel = chargeLevel;
+
+      BatteryIcon = getBatteryIcon(Number(chargeLevel), isCharging);
+    });
+  }
+
   onMount(async () => {
     try {
-      //@ts-ignore
-      const battery = await window.navigator.getBattery();
-
-      async function updateBatteryInfo() {
-        const level = (battery.level * 100).toFixed(0);
-        const isCharging = battery.charging;
-
-        chargingStatus = isCharging;
-        batteryLevel = Number(level);
-
-        BatteryIcon = getBatteryIcon(batteryLevel, chargingStatus);
-      }
-
-      battery.addEventListener("levelchange", updateBatteryInfo);
-      battery.addEventListener("chargingchange", updateBatteryInfo);
-
-      // Initial update
-
       updateBatteryInfo();
     } catch (error) {
       BatteryIcon = BatteryWarningIcon;
-      // console.error("error", error);
     }
   });
 </script>

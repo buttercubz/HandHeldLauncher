@@ -18,7 +18,7 @@
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <li
   class={cn(
-    "relative outlined outline-offset-0 rounded-xl w-[200px] h-[210px] flex-shrink-0 transition-all group navigable-games"
+    "relative outlined outline-offset-0 rounded-xl w-[220px] h-[310px] flex-shrink-0 transition-all group navigable-games"
   )}
   on:click={() => (openModal = !openModal)}
   data-click
@@ -29,7 +29,7 @@
     <Steam />
   </span>
 
-  <img class="w-full h-full object-fill rounded-xl" src={imgSrc} alt={title} />
+  <img class="w-full h-full object-cover rounded-xl" src={imgSrc} alt={title} />
   <div
     class="opacity-0 transition-all bg-primary/10 bottom-0 absolute w-full p-2 rounded-b-lg backdrop-blur-xl font-bold text-foreground title-game-card flex flex-row items-center justify-between"
   >

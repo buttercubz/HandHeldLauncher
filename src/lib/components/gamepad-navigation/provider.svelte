@@ -46,10 +46,6 @@
       const isRemoved =
         removedNode === numericKeyboard || removedNode === textKeyboard;
 
-      console.log({
-        removedNode,
-      });
-
       if (isAdded) {
         dispatch("openKeyboard", isAdded);
         // add data-click to keys
