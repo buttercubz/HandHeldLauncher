@@ -288,6 +288,24 @@ export const createGamepadNavigation = (
     }
   };
 
+  function handleAnalogMovement(axis: number, value: number) {
+    const currentTime = Date.now();
+    const deadzone = 0.5;
+
+    if (
+      Math.abs(value) > deadzone &&
+      currentTime - lastActionTime >= throttleTime
+    ) {
+      if (axis === 0) {
+        handleNavigation(value > 0 ? "right" : "left");
+        lastActionTime = currentTime;
+      } else if (axis === 1) {
+        handleNavigation(value > 0 ? "down" : "up");
+        lastActionTime = currentTime;
+      }
+    }
+  }
+
   const initGamepadListener = () => {
     const listener = new GamepadListener({ analog: true });
 
@@ -334,25 +352,7 @@ export const createGamepadNavigation = (
 
     listener.start();
   };
-  // miliseconds
 
-  function handleAnalogMovement(axis: number, value: number) {
-    const currentTime = Date.now();
-    const deadzone = 0.5;
-
-    if (
-      Math.abs(value) > deadzone &&
-      currentTime - lastActionTime >= throttleTime
-    ) {
-      if (axis === 0) {
-        handleNavigation(value > 0 ? "right" : "left");
-        lastActionTime = currentTime;
-      } else if (axis === 1) {
-        handleNavigation(value > 0 ? "down" : "up");
-        lastActionTime = currentTime;
-      }
-    }
-  }
   return {
     setZones,
     updateFocus,
